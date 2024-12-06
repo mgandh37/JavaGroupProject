@@ -1,15 +1,23 @@
-    package com.example.mauligandhi_comp228lab5;
+/* Lab - 5
+Course Code and section: COMP 228 - Section 405
+Professor: Shaharm Jalaliniya
+Group Number:
+Member's Name: Isabel Lorrelyn Lag-ang, Mauli Gandhi
+Student Number: 301385246 and 301486344
+*/
+package com.example.mauligandhi_comp228lab5;
 
     import java.sql.*;
-    import java.util.ArrayList;
+    import java.time.LocalDate;
     import java.util.List;
 
-    import oracle.jdbc.driver.*;
-    import oracle.sql.*;
+    import javafx.collections.FXCollections;
+    import javafx.collections.ObservableList;
 
     public class DBUtil {
         private static Connection connection = null;
 
+        //connections to the table
         public static void dbDisconnect() throws SQLException {
             if(connection != null && !connection.isClosed())
             {
@@ -26,6 +34,7 @@
             }
             return connection;
         }
+        //creating tables
         public static void createTable(String tableName, String sql) throws SQLException {
             dropTableIfExists(tableName); // Drop the table first if it exists
             try (Connection conn = getConnection();
@@ -36,7 +45,7 @@
             }
 
         }
-
+        //drop tables
         public static void dropTableIfExists(String tableName) throws SQLException {
             //dbConnect();
             //String sql = "drop table IF EXISTS " + tableName;
@@ -61,18 +70,40 @@
                 System.err.println("Error dropping table '" + tableName + "': " + e.getMessage());
             }
         }
-
-        public static void updateRecord(String tableName, String setClause, String whereClause) throws SQLException {
-            String sql = "UPDATE " + tableName + " SET " + setClause + " WHERE " + whereClause;
+        //Update functions
+        public static void updateOwner(int ownerID, String name, String address, String phone, String email) throws SQLException {
+            String sql = "UPDATE Owner SET name = '" + name + "', address = '" + address + "', phone = '"
+                    + phone + "', email = '" + email + "' where ownerID = " + ownerID;;
             try (Connection conn = getConnection();
                  Statement statement = conn.createStatement()) {
                 int rowsUpdated = statement.executeUpdate(sql);
-                System.out.println(rowsUpdated + " record(s) updated in " + tableName);
+                System.out.println(rowsUpdated + " record(s) updated in the Owner table.");
             } catch (SQLException e) {
-                System.err.println("Error updating record in " + tableName + ": " + e.getMessage());
+                System.err.println("Error updating record in Owner Table : " + e.getMessage());
             }
         }
-
+        public static void updateCar(int carID, String make, String model, int vin, int buildYear, String type) throws SQLException {
+            String sql = "UPDATE Car SET make = '" + make + "', model = '" + model + "', VIN = '"
+                    + vin + "', buildYear = '" + buildYear +  "', type = '" + type + "' where carID = " + carID;;
+            try (Connection conn = getConnection();
+                 Statement statement = conn.createStatement()) {
+                int rowsUpdated = statement.executeUpdate(sql);
+                System.out.println(rowsUpdated + " record(s) updated in the Car table.");
+            } catch (SQLException e) {
+                System.err.println("Error updating record in Car Table : " + e.getMessage());
+            }
+        }
+        public static void updateRepair(int repairID, int ownerID, int carID, String serviceDate, String description, int cost) throws SQLException {
+            String sql = "UPDATE Repair SET ownerID = '" + ownerID + "', carID = '" + carID + "', description = '" + description + "' , serviceDate = TO_DATE('"+serviceDate+"', 'YYYY-MM-DD'), cost = '"+ cost +"' where repairID = " + repairID;
+            try (Connection conn = getConnection();
+                 Statement statement = conn.createStatement()) {
+                int rowsUpdated = statement.executeUpdate(sql);
+                System.out.println(rowsUpdated + " record(s) updated in the Repair table.");
+            } catch (SQLException e) {
+                System.err.println("Error updating record in Repair Table : " + e.getMessage());
+            }
+        }
+        //Delete items
         public static void deleteRecord(String tableName, String whereClause) throws SQLException {
             String sql = "DELETE FROM " + tableName + " WHERE " + whereClause;
             try (Connection conn = getConnection();
@@ -83,7 +114,7 @@
                 System.err.println("Error deleting record from " + tableName + ": " + e.getMessage());
             }
         }
-
+        //Adding items
         public static void insertData(String sql) throws SQLException {
             try (Connection conn = getConnection();
                  Statement statement = conn.createStatement()) {
@@ -93,25 +124,11 @@
                 System.err.println("Error inserting data: " + e.getMessage());
             }
         }
-
-        public static void dropSequence(String sequenceName) throws SQLException {
-            String sql = "DROP SEQUENCE " + sequenceName;
-            try (Connection conn = getConnection();
-                 Statement statement = conn.createStatement()) {
-                statement.execute(sql);
-                System.out.println("Sequence '" + sequenceName + "' dropped successfully.");
-            } catch (SQLException e) {
-                if (e.getErrorCode() == 2289) { // ORA-02289: sequence does not exist
-                    System.out.println("Sequence '" + sequenceName + "' does not exist.");
-                } else {
-                    System.err.println("Error dropping sequence '" + sequenceName + "': " + e.getMessage());
-                }
-            }
-        }
-
-        public static List<Owner> getAllOwners() throws SQLException {
+        //creating an array of the items in the sql to that will be displayed in the table in GUI
+        //each table has similar codes
+        public static ObservableList<Owner> getAllOwners() throws SQLException {
             String sql = "SELECT * FROM Owner";
-            List<Owner> ownerList = new ArrayList<>();
+            ObservableList<Owner> ownerList = FXCollections.observableArrayList();
             try (Connection conn = getConnection();
                  Statement statement = conn.createStatement();
                  ResultSet resultSet = statement.executeQuery(sql)) {
@@ -139,9 +156,9 @@
             }
             return ownerList;
         }
-        public static List<Car> getAllCars() throws SQLException {
+        public static ObservableList<Car> getAllCars() throws SQLException {
             String sql = "SELECT * FROM Car";
-            List<Car> carList = new ArrayList<>();
+            ObservableList<Car> carList =  FXCollections.observableArrayList();
             try (Connection conn = getConnection();
                  Statement statement = conn.createStatement();
                  ResultSet resultSet = statement.executeQuery(sql)) {
@@ -171,9 +188,9 @@
             }
             return carList;
         }
-        public static List<Repair> getAllRepairs() throws SQLException {
+        public static ObservableList<Repair> getAllRepairs() throws SQLException {
             String sql = "SELECT * FROM Repair";
-            List<Repair> repairList = new ArrayList<>();
+            ObservableList<Repair> repairList = FXCollections.observableArrayList();
 
             try (Connection conn = getConnection();
                  Statement statement = conn.createStatement();
@@ -204,7 +221,8 @@
             }
             return repairList;
         }
-
+        // Gets the Owner ID
+        //code is similar get car by ID
         public static Owner getOwnerById(int ownerID) throws SQLException {
             String sql = "SELECT * FROM Owner WHERE ownerID = ?";
             try (Connection conn = getConnection();
@@ -224,7 +242,7 @@
             }
             return null; // Return null if no record is found
         }
-
+        //Gets the Car by ID
         public static Car getCarById(int carID) throws SQLException {
             String sql = "SELECT * FROM Car WHERE carID = ?";
             try (Connection conn = getConnection();
@@ -245,13 +263,13 @@
             }
             return null; // Return null if no record is found
         }
-
-        public static List<Repair> displayRepairsBetweenDates(String startDate, String endDate) throws SQLException {
+        //Gets the repair information by users inputting two dates
+        public static ObservableList<Repair> displayRepairsBetweenDates(String startDate, String endDate) throws SQLException {
             String sql = """
         SELECT * FROM Repair
         WHERE serviceDate BETWEEN TO_DATE(?, 'YYYY-MM-DD') AND TO_DATE(?, 'YYYY-MM-DD')
         """;
-            List<Repair> repairList = new ArrayList<>();
+            ObservableList<Repair> repairList = FXCollections.observableArrayList();
             try (Connection conn = getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, startDate);
@@ -283,13 +301,13 @@
             }
             return repairList;
         }
-
-        public static List<Repair> getRepairsByOwnerId(int ownerID) throws SQLException {
+        //gets repair information by the owner ID
+        public static  ObservableList<Repair> getRepairsByOwnerId(int ownerID) throws SQLException {
             String sql = """
                 SELECT * FROM Repair
                 WHERE ownerID = ?
                 """;
-            List<Repair> repairList = new ArrayList<>();
+            ObservableList<Repair> repairList = FXCollections.observableArrayList();
             try (Connection conn = getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setInt(1, ownerID);
@@ -318,14 +336,14 @@
             }
             return repairList;
         }
-
-        public static List<Repair> getRepairsByCarId(int carID) throws SQLException {
+        //gets the repair information by car the ID
+        public static  ObservableList<Repair> getRepairsByCarId(int carID) throws SQLException {
             String sql = """
                 SELECT * FROM Repair
                 WHERE carID = ?
                 """;
 
-            List<Repair> repairList = new ArrayList<>();
+            ObservableList<Repair> repairList = FXCollections.observableArrayList();
             try (Connection conn = getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setInt(1, carID);
@@ -357,7 +375,7 @@
         }
 
 
-
+        //used to run the sql commands
         public static void main(String[] args) throws SQLException {
 
             String ownerTableSQL = """
@@ -393,7 +411,7 @@
                 FOREIGN KEY (carID) REFERENCES Car(carID)
             )
             """;
-            String repairIdSequenceSQL = """
+            /*String repairIdSequenceSQL = """
             CREATE SEQUENCE Repair_Seq
             START WITH 1
             INCREMENT BY 1
@@ -406,18 +424,20 @@
             BEGIN
                 :NEW.repairID := Repair_Seq.NEXTVAL;
             END;
-            """;
+            """;*/
 
 
             try {
                 dropTableIfExists("Repair");
-                dropSequence("Repair_Seq");
+                dropTableIfExists("Owner");
+                dropTableIfExists("Car");
+                //dropSequence("Repair_Seq");
                 createTable("Owner", ownerTableSQL);
                 createTable("Car", carTableSQL);
                 createTable("Repair", repairTableSQL);
 
-                executeSQL(repairIdSequenceSQL); // Create the sequence
-                executeSQL(repairIdTriggerSQL); // Create the trigger
+                //executeSQL(repairIdSequenceSQL); // Create the sequence
+                //executeSQL(repairIdTriggerSQL); // Create the trigger
 
                 // Populate tables with data
                 populateOwnerTable();
@@ -437,39 +457,39 @@
 
                 System.out.println("Printing Records For Specific Entity using List:");
 
-                // Fetch specific owner
-                Owner specificOwner = getOwnerById(1);
-                System.out.println("Specific Owner: " + specificOwner.getName());
+//                // Fetch specific owner
+//                Owner specificOwner = getOwnerById(1);
+//                System.out.println("Specific Owner: " + specificOwner.getName());
 
-                // Fetch specific car
-                Car specificCar = getCarById(1);
-                System.out.println("Specific Car: " + specificCar.getModel() + " : " + specificCar.getMake());
+//                // Fetch specific car
+//                Car specificCar = getCarById(1);
+//                System.out.println("Specific Car: " + specificCar.getModel() + " : " + specificCar.getMake());
 
 
-                // Fetch repairs for a specific owner
-                List<Repair> ownerRepairs = getRepairsByOwnerId(1);
-                ownerRepairs.forEach(repair -> System.out.println("Repair ID: " + repair.getRepairID()));
-
-                // Fetch repairs for a specific car
-                List<Repair> carRepairs = getRepairsByCarId(1);
-                carRepairs.forEach(repair -> System.out.println("Repair ID: " + repair.getRepairID()));
-
-                // Fetch repairs between dates
-                List<Repair> dateRepairs = displayRepairsBetweenDates("2024-01-01", "2024-03-31");
-                dateRepairs.forEach(repair -> System.out.println("Service Date: " + repair.getServiceDate()));
+//                // Fetch repairs for a specific owner
+//                List<Repair> ownerRepairs = getRepairsByOwnerId(1);
+//                ownerRepairs.forEach(repair -> System.out.println("Repair ID: " + repair.getRepairID()));
+//
+//                // Fetch repairs for a specific car
+//                List<Repair> carRepairs = getRepairsByCarId(1);
+//                carRepairs.forEach(repair -> System.out.println("Repair ID: " + repair.getRepairID()));
+//
+//                // Fetch repairs between dates
+//                List<Repair> dateRepairs = displayRepairsBetweenDates("2024-01-01", "2024-03-31");
+//                dateRepairs.forEach(repair -> System.out.println("Service Date: " + repair.getServiceDate()));
 
                 // Example: Update records
 
-                //Comment out the below code that update and delete records once UI is finally ready
-                updateRecord("Owner", "address = '123 Updated St'", "ownerID = 1");
-                updateRecord("Car", "model = 'Updated Model'", "carID = 1");
-                updateRecord("Repair", "description = 'Updated Repair Description'", "repairID = 1");
+//                //Comment out the below code that update and delete records once UI is finally ready
+//                updateRecord("Owner", "address = '123 Updated St'", "ownerID = 1");
+//                updateRecord("Car", "model = 'Updated Model'", "carID = 1");
+//                updateRecord("Repair", "description = 'Updated Repair Description'", "repairID = 1");
 
                 // Example: Delete records
-
-                deleteRecord("Repair", "repairID = 5");
-                deleteRecord("Owner", "ownerID = 5");
-                deleteRecord("Car", "carID = 5");
+//
+//                deleteRecord("Repair", "repairID = 5");
+//                deleteRecord("Owner", "ownerID = 5");
+//                deleteRecord("Car", "carID = 5");
 
                 // Display all the records
                 System.out.println("Displaying Records After Update and Delete");
@@ -489,22 +509,15 @@
                 System.err.println("Error during table creation: " + e.getMessage());
             }
         }
-
-        public static void executeSQL(String sql) throws SQLException {
-            try (Connection conn = getConnection();
-                 Statement statement = conn.createStatement()) {
-                statement.execute(sql);
-                System.out.println("Executed SQL: " + sql);
-            } catch (SQLException e) {
-                System.err.println("Error executing SQL: " + e.getMessage());
-            }
-        }
+        //populate data in the Owner table, Car table, and Repair table
+        //All the codes are similar
         public static void populateOwnerTable() throws SQLException {
             insertData("INSERT INTO Owner VALUES (1, 'John Doe', '123 Main St', '555-1234', 'john.doe@example.com')");
             insertData("INSERT INTO Owner VALUES (2, 'Jane Smith', '456 Elm St', '555-5678', 'jane.smith@example.com')");
             insertData("INSERT INTO Owner VALUES (3, 'Bob Johnson', '789 Oak St', '555-9012', 'bob.johnson@example.com')");
             insertData("INSERT INTO Owner VALUES (4, 'Alice Brown', '321 Pine St', '555-3456', 'alice.brown@example.com')");
             insertData("INSERT INTO Owner VALUES (5, 'Charlie Davis', '654 Cedar St', '555-7890', 'charlie.davis@example.com')");
+            String sql = "SELECT * FROM Owner";
         }
         public static void populateCarTable() throws SQLException {
             insertData("INSERT INTO Car VALUES (1, 'Toyota', 'Camry', 123456789, 2020, 'Sedan')");
@@ -512,12 +525,19 @@
             insertData("INSERT INTO Car VALUES (3, 'Ford', 'F-150', 456123789, 2019, 'Truck')");
             insertData("INSERT INTO Car VALUES (4, 'Chevrolet', 'Malibu', 789456123, 2022, 'Sedan')");
             insertData("INSERT INTO Car VALUES (5, 'Tesla', 'Model 3', 321789654, 2023, 'Electric')");
+            String sql = "SELECT * FROM Car";
         }
         public static void populateRepairTable() throws SQLException {
-            insertData("INSERT INTO Repair (repairID, ownerID, carID, serviceDate, description, cost) VALUES (1, 1, 1, TO_DATE('2024-01-01', 'YYYY-MM-DD'), 'Oil Change', 50)");
-            insertData("INSERT INTO Repair (repairID, ownerID, carID, serviceDate, description, cost) VALUES (2, 2, 2, TO_DATE('2024-02-01', 'YYYY-MM-DD'), 'Tire Rotation', 40)");
-            insertData("INSERT INTO Repair (repairID, ownerID, carID, serviceDate, description, cost) VALUES (3, 3, 3, TO_DATE('2024-03-01', 'YYYY-MM-DD'), 'Brake Replacement', 200)");
-            insertData("INSERT INTO Repair (repairID, ownerID, carID, serviceDate, description, cost) VALUES (4, 4, 4, TO_DATE('2024-04-01', 'YYYY-MM-DD'), 'Battery Replacement', 150)");
-            insertData("INSERT INTO Repair (repairID, ownerID, carID, serviceDate, description, cost) VALUES (5, 5, 5, TO_DATE('2024-05-01', 'YYYY-MM-DD'), 'Engine Repair', 500)");
+            insertData("INSERT INTO Repair (repairID, ownerID, carID, serviceDate, description, cost) VALUES (1, 1, 1, TO_DATE('2024-01-01', 'YYYY-MM-DD'), 'Oil Change', 50)"); //1
+            insertData("INSERT INTO Repair (repairID, ownerID, carID, serviceDate, description, cost) VALUES (2, 2, 2, TO_DATE('2024-02-01', 'YYYY-MM-DD'), 'Tire Rotation', 40)"); //2
+            insertData("INSERT INTO Repair (repairID, ownerID, carID, serviceDate, description, cost) VALUES (3, 3, 3, TO_DATE('2024-03-01', 'YYYY-MM-DD'), 'Brake Replacement', 200)");  //3
+            insertData("INSERT INTO Repair (repairID, ownerID, carID, serviceDate, description, cost) VALUES (4, 4, 4, TO_DATE('2024-04-01', 'YYYY-MM-DD'), 'Battery Replacement', 150)"); //4
+            insertData("INSERT INTO Repair (repairID, ownerID, carID, serviceDate, description, cost) VALUES (5, 5, 5, TO_DATE('2024-05-01', 'YYYY-MM-DD'), 'Engine Repair', 900)");//5
+            insertData("INSERT INTO Repair (repairID, ownerID, carID, serviceDate, description, cost) VALUES (6, 1, 1, TO_DATE('2024-12-05', 'YYYY-MM-DD'), 'Tire Change', 1000)");//6
+            insertData("INSERT INTO Repair (repairID, ownerID, carID, serviceDate, description, cost) VALUES (7, 2, 2, TO_DATE('2024-07-20', 'YYYY-MM-DD'), 'Replace Bumper', 9000)"); //7
+            insertData("INSERT INTO Repair (repairID, ownerID, carID, serviceDate, description, cost) VALUES (8, 5, 5, TO_DATE('2024-09-29', 'YYYY-MM-DD'), 'Replaced Windows', 10000)"); //8
+            insertData("INSERT INTO Repair (repairID, ownerID, carID, serviceDate, description, cost) VALUES (9, 4, 4, TO_DATE('2024-06-09', 'YYYY-MM-DD'), 'Engine Repair', 950)"); //9
+            insertData("INSERT INTO Repair (repairID, ownerID, carID, serviceDate, description, cost) VALUES (10, 3, 3, TO_DATE('2024-11-19', 'YYYY-MM-DD'), 'Instilled new seats', 2300)"); //10
+            String sql = "SELECT * FROM Repair";
         }
     }

@@ -1,3 +1,10 @@
+/* Lab - 4
+Course Code and section: COMP 228 - Section 405
+Professor: Shaharm Jalaliniya
+Group Number:
+Member's Name: Isabel Lorrelyn Lag-ang, Mauli Gandhi
+Student Number: 301385246 and 301486344
+*/
 package com.example.mauligandhi_comp228lab5;
 
 import java.util.Date;

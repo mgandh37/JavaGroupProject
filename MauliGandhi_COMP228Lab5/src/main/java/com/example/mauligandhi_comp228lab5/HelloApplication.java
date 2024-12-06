@@ -1,3 +1,10 @@
+/* Lab - 5
+Course Code and section: COMP 228 - Section 405
+Professor: Shaharm Jalaliniya
+Group Number:
+Member's Name: Isabel Lorrelyn Lag-ang, Mauli Gandhi
+Student Number: 301385246 and 301486344
+*/
 package com.example.mauligandhi_comp228lab5;
 
 import javafx.application.Application;
@@ -11,7 +18,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1200, 880);
+        Scene scene = new Scene(fxmlLoader.load(), 1703, 1000);
         stage.setTitle("Shop Repair Information");
         stage.setScene(scene);
         stage.show();

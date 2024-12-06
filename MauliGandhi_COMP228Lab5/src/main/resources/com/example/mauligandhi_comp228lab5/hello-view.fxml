@@ -10,13 +10,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Button?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1061.0" prefWidth="1185.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mauligandhi_comp228lab5.HelloController">
+<!--Lab - 5
+Course Code and section: COMP 228 - Section 405
+Professor: Shaharm Jalaliniya
+Group Number:
+Member's Name: Isabel Lorrelyn Lag-ang, Mauli Gandhi
+Student Number: 301385246 and 301486344
+this is how the GUI is set up-->
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1982.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mauligandhi_comp228lab5.HelloController">
    <children>
-      <VBox prefHeight="390.0" prefWidth="464.0">
+      <VBox prefHeight="396.0" prefWidth="391.0">
          <children>
             <Label text="Owner Information" />
             <Label text="Owner's Id:" />
-            <TextField fx:id="ownerIdTextField" promptText="ex. 1" />
+            <TextField fx:id="o_ownerIdTextField" promptText="ex. 1" />
             <Label text="Owner's Name:" />
             <TextField fx:id="nameTextField" promptText="ex. John Doe" />
             <Label text="Address:" />
@@ -25,49 +34,120 @@
             <TextField fx:id="phoneTextField" promptText="ex. 999-888-777" />
             <Label text="Email:" />
             <TextField fx:id="emailTextField" promptText="ex. useremail@mail.com" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="updateOwnerButton" mnemonicParsing="false" onAction="#updateOwnerButtonAction" text="Update Owner" />
+                  <Button fx:id="deleteOwnerButton" mnemonicParsing="false" onAction="#deleteOwnerButtonAction" text="Delete Owner" />
+                  <Button fx:id="addOwnerButton" mnemonicParsing="false" onAction="#addOwnerButtonAction" text="Add Owner" />
+               </children>
+            </HBox>
          </children>
       </VBox>
-      <VBox layoutX="494.0" layoutY="-3.0" prefHeight="390.0" prefWidth="316.0">
+      <VBox layoutX="412.0" prefHeight="462.0" prefWidth="316.0">
          <children>
             <Label text="Car Information" />
             <Label text="Car ID:" />
-            <TextField fx:id="carIdTextField" promptText="ex. 1" />
+            <TextField fx:id="c_carIdTextField" promptText="ex. 1" />
             <Label text="Brand:" />
             <TextField fx:id="brandTextField" promptText="ex. Toyota" />
+            <Label text="Model" />
+            <TextField fx:id="modelTextField" promptText="ex. Civic" />
             <Label text="VIN:" />
             <TextField fx:id="vinTextField" promptText="ex. 2468123" />
             <Label text="Year Car was Built:" />
             <TextField fx:id="yearTextField" promptText="ex. 2019" />
             <Label text="Car Type:" />
-            <ComboBox fx:id="typeComboBox" prefHeight="39.0" prefWidth="264.0" promptText="Select Car type" />
+            <ComboBox fx:id="typeComboBox" prefHeight="38.0" prefWidth="264.0" promptText="Select Car type" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="addCarButton" mnemonicParsing="false" onAction="#addCarButtonAction" text="Add Car" />
+                  <Button fx:id="deleteCarButton" mnemonicParsing="false" onAction="#deleteCarButtonAction" text="Delete Car" />
+                  <Button fx:id="updateCarButton" mnemonicParsing="false" onAction="#updateCarButtonAction" text="Update Car" />
+               </children>
+            </HBox>
          </children>
       </VBox>
-      <VBox layoutX="828.0" layoutY="6.0" prefHeight="353.0" prefWidth="308.0">
+      <VBox layoutX="747.0" prefHeight="462.0" prefWidth="339.0">
          <children>
             <Label text="Repair Information" />
             <Label text="Repair ID:" />
             <TextField fx:id="repairIdTextfield" promptText="ex. 1" />
+            <Label text="Owner ID:" />
+            <TextField fx:id="r_ownerIdTextField" promptText="ex. 1" />
+            <Label text="Car ID:" />
+            <TextField fx:id="r_carIdTextField" promptText="ex.1" />
+            <Label text="Repair Date" />
+            <DatePicker fx:id="serviceDate" promptText="Select date" />
             <Label text="Description:" />
             <TextField fx:id="descriptionTextField" promptText="Type repairs needed" />
-            <Label text="Start Date:" />
-            <DatePicker fx:id="startDatePicker" />
-            <Label text="End Date:" />
-            <DatePicker fx:id="endDatePicker" />
             <Label text="Cost" />
             <TextField fx:id="costTextField" promptText="ex. $4,000" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="deleteRepairButton" mnemonicParsing="false" onAction="#deleteRepairButtonAction" prefHeight="22.0" prefWidth="102.0" text="Delete Repair" />
+                  <Button fx:id="addRepairButton" mnemonicParsing="false" onAction="#addRepairButtonAction" text="Add Repair" />
+                  <Button fx:id="updateRepairButton" mnemonicParsing="false" onAction="#updateRepairButtonAction" text="Update Repair" />
+               </children>
+            </HBox>
          </children>
       </VBox>
-      <Button fx:id="addButton" layoutX="193.0" layoutY="449.0" mnemonicParsing="false" onAction="#addButtonAction" text="Add Data" />
-      <Button fx:id="updateButton" layoutX="554.0" layoutY="449.0" mnemonicParsing="false" onAction="#updateButtonAction" text="Update Data" />
-      <Button fx:id="deleteButton" layoutX="943.0" layoutY="449.0" mnemonicParsing="false" onAction="#deleteButtonAction" text="Delete Data" />
-      <TableView fx:id="table" layoutX="27.0" layoutY="539.0" prefHeight="200.0" prefWidth="1104.0">
+      <VBox layoutX="1143.0" layoutY="7.0" prefHeight="328.0" prefWidth="346.0">
+         <children>
+            <Label text="Repair search" />
+            <Label text="Start Date:" />
+            <DatePicker fx:id="startDate" promptText="Select Date" />
+            <Label text="End Date:" />
+            <DatePicker fx:id="endDate" promptText="Select Date" />
+            <Button fx:id="sdrButton" mnemonicParsing="false" onAction="#srdButtonAction" text="Search Repair" />
+            <Label text="OR" />
+            <Label text="Owner ID" />
+            <TextField fx:id="rsOwnerId" promptText="ex.1" />
+            <Button fx:id="sroButton" mnemonicParsing="false" onAction="#sroButtonAction" text="Search Repair" />
+            <Label text="OF" />
+            <Label text="Car ID" />
+            <TextField fx:id="rsCarId" promptText="ex.1" />
+            <Button fx:id="srcButton" mnemonicParsing="false" onAction="#srcButtonAction" text="Search Repair" />
+         </children>
+      </VBox>
+      <TableView fx:id="ownerTable" layoutX="14.0" layoutY="563.0" prefHeight="200.0" prefWidth="656.0">
         <columns>
-          <TableColumn fx:id="r_userid_column" prefWidth="75.0" text="userId" />
-          <TableColumn fx:id="r_carid_column" prefWidth="75.0" text="carId" />
-            <TableColumn fx:id="r_startdate_column" prefWidth="75.0" text="startDate" />
-            <TableColumn fx:id="r_enddate_column" prefWidth="75.0" text="endDate" />
+          <TableColumn fx:id="o_owner_id_column" prefWidth="110.0" text="ownerID" />
+          <TableColumn fx:id="name_column" minWidth="0.0" prefWidth="76.0" text="Name" />
+            <TableColumn fx:id="address_column" minWidth="1.0" prefWidth="137.0" text="Address" />
+            <TableColumn fx:id="phone_column" prefWidth="153.0" text="Phone" />
+            <TableColumn fx:id="email_column" prefWidth="179.0" text="Email" />
         </columns>
       </TableView>
-      <Button fx:id="queryButton" layoutX="518.0" layoutY="822.0" mnemonicParsing="false" onAction="#queryButtonAction" text="Refresh Information" />
+      <TableView fx:id="carTable" layoutX="7.0" layoutY="777.0" prefHeight="200.0" prefWidth="769.0">
+        <columns>
+          <TableColumn fx:id="c_car_id_column" prefWidth="75.0" text="carID" />
+          <TableColumn fx:id="brand_column" prefWidth="75.0" text="make" />
+            <TableColumn fx:id="model_column" prefWidth="116.0" text="model" />
+            <TableColumn fx:id="vin_column" prefWidth="181.0" text="VIN" />
+            <TableColumn fx:id="year_column" prefWidth="141.0" text="buildyear" />
+            <TableColumn fx:id="type_column" minWidth="0.0" prefWidth="184.0" text="type" />
+        </columns>
+      </TableView>
+      <TableView fx:id="repairTable" layoutX="693.0" layoutY="563.0" prefHeight="200.0" prefWidth="781.0">
+        <columns>
+          <TableColumn fx:id="r_repair_id_column" prefWidth="106.0" text="repairID" />
+          <TableColumn fx:id="r_owner_id_column" prefWidth="104.0" text="ownerID" />
+            <TableColumn fx:id="r_car_id_column" prefWidth="96.0" text="carID" />
+            <TableColumn fx:id="r_repairDate" prefWidth="142.0" text="serviceDate" />
+            <TableColumn fx:id="r_description_column" prefWidth="169.0" text="description" />
+            <TableColumn fx:id="r_cost_column" prefWidth="151.0" text="cost" />
+        </columns>
+      </TableView>
+      <TableView fx:id="rsTable" layoutX="793.0" layoutY="777.0" prefHeight="200.0" prefWidth="718.0">
+        <columns>
+          <TableColumn fx:id="rs_repair_id_column" prefWidth="113.0" text="repairID" />
+          <TableColumn fx:id="rs_owner_id_column" prefWidth="93.0" text="ownerID" />
+            <TableColumn fx:id="rs_car_id_column" prefWidth="75.0" text="carID" />
+            <TableColumn fx:id="rs_repairDate" prefWidth="119.0" text="serviceDate" />
+            <TableColumn fx:id="rs_description_column" prefWidth="178.0" text="description" />
+            <TableColumn fx:id="rs_cost_column" prefWidth="135.0" text="cost" />
+        </columns>
+      </TableView>
+      <Button fx:id="queryButton" layoutX="594.0" layoutY="469.0" mnemonicParsing="false" onAction="#queryButtonAction" text="Refresh Information" />
    </children>
 </Pane>
